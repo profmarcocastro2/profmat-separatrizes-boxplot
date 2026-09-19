@@ -1,0 +1,209 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, top=3cm, right=2cm, bottom=2cm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{A Intuição Geométrica do Fator 1,5}
+\fancyhead[R]{Tukey e a Curva de Gauss}
+\fancyfoot[C]{\thepage}
+
+\title{\vspace{-2cm}\textbf{A Lógica e a História do Fator 1,5 de Tukey}\\ \large Por que 1,5 e não 2 ou 1? De onde John Tukey tirou esse número em 1977?}
+\author{Marco Antonio Lima de Castro}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+O texto explora a fundamentação histórica e matemática por trás do fator 1,5 de Tukey, utilizado para identificar valores atípicos em boxplots. A constante foi estabelecida em 1977 por John Tukey devido à facilidade do cálculo mental em uma era pré-computacional e à necessidade de métricas resistentes a anomalias. Além do pragmatismo empírico nos Bell Labs, o texto detalha a conexão desse método com a Distribuição Normal e a probabilidade acumulada sob a curva de Gauss. São apresentadas resoluções matemáticas complexas, incluindo integrais de Gauss e aproximações para a função quantil, que validam a eficácia do fator. Em suma, o conteúdo demonstra como uma convenção prática de análise exploratória se equilibra entre a simplicidade aritmética e o rigor estatístico.
+\end{abstract}
+
+\section{Introdução}
+Na década de 1970 - e mais especificamente em \textbf{1977}, ano em que John W. Tukey publicou sua obra clássica \textit{Exploratory Data Analysis} (EDA) - o cenário da estatística e da computação era radicalmente diferente do atual.
+
+A escolha do fator \textbf{1,5} para as cercas do \textit{boxplot} foi moldada por cinco motivos históricos e filosóficos que refletem a época:
+
+\subsection{A Era do Lápis, Papel e Cálculo Mental}
+Na década de 70, computadores eram recursos escassos, caros e inacessíveis para o trabalho diário de estudantes e pesquisadores. A análise estatística era feita predominantemente à mão, em folhas de papel milimetrado e com o auxílio de réguas de cálculo ou calculadoras mecânicas simples.
+
+Tukey queria uma ferramenta visual prática que qualquer pessoa pudesse desenhar rapidamente. A operação por trás do fator \textbf{1,5} tem uma propriedade aritmética simples:
+\begin{quote}
+\textbf{Multiplicar por 1,5 é equivalente a pegar um valor e somar com a sua própria metade.}
+\end{quote}
+Para quem estava calculando no papel, achar a largura da caixa (IQR), dividir esse valor por 2 e somá-lo à borda da caixa era uma conta mental quase instantânea, dispensando divisões complexas ou tabelas de distribuição.
+
+\subsection{A Filosofia da "Análise Exploratória de Dados" (EDA)}
+Antes de Tukey, a estatística era dominada pelo paradigma confirmatório (testes de hipóteses rigorosos, pressupostos de normalidade estritos e cálculo de médias). Tukey introduziu a atitude do \textbf{estatístico como um detetive}:
+\begin{itemize}
+    \item O objetivo do \textit{boxplot} não era emitir um "veredito matemático final" sobre um ponto ser inválido, mas sim \textbf{chamar a atenção visual} do analista para pontos que mereciam investigação.
+    \item Ele precisava de uma régua empírica rápida (\textit{rule of thumb}) que separasse o comportamento rotineiro dos dados daqueles valores que exigiam um olhar mais atento.
+\end{itemize}
+
+\subsection{A Busca por "Estatísticas Resistentes" (Robustez)}
+A estatística clássica usava a média e o desvio-padrão para identificar anomalias (como a regra dos $3\sigma$). O grande problema prático que Tukey e seus colegas do \textit{Bell Labs} enfrentavam era que \textbf{um único outlier extremo inflava o desvio-padrão e deslocava a média}, fazendo com que o próprio teste falhasse em detectar o problema.
+
+Tukey adotou os \textbf{quartis e a amplitude interquartílica (IQR)} porque são métricas não paramétricas e \textbf{resistentes a contaminações}. O fator 1,5 funcionava como uma ponte prática que imitava a sensibilidade do filtro de 3 desvios-padrão da curva normal, mas sem sofrer da instabilidade da média e do desvio-padrão.
+
+\subsection{O Teste Empírico nos Laboratórios Bell}
+Ao testar a ferramenta com múltiplos conjuntos de dados reais nos Laboratórios Bell, Tukey observou o comportamento de diferentes multiplicadores:
+\begin{itemize}
+    \item \textbf{Se usasse 1,0:} O gráfico gerava "falsos alarmes" em quase toda amostra regular, poluindo o desenho com pontos que não tinham nada de especial.
+    \item \textbf{Se usasse 2,0 ou 3,0:} A caixa ficava permissiva demais, escondendo anomalias moderadas que deveriam ser investigadas.
+\end{itemize}
+O fator \textbf{1,5} surgiu empiricamente como o ponto de equilíbrio ("\textit{Goldilocks zone}") — nem rígido demais a ponto de causar paranoia, nem largo demais a ponto de cegar o pesquisador. Para valores verdadeiramente aberrantes, Tukey sugeriu o multiplicador \textbf{3,0} (que ele chamou de limite para \textit{outliers} extremos).
+
+\subsection{Pragmatismo Engenheiresco vs. Dogma}
+John Tukey era engenheiro de formação e topógrafo antes de se tornar um dos maiores estatísticos do século XX. Ele enfatizava frequentemente que o \textbf{1,5 não era uma constante mágica universal ou uma lei da natureza}, mas sim uma \textbf{convenção de trabalho} conveniente e eficaz.
+
+Quando questionado por colegas teóricos sobre o motivo exato de ter escolhido 1,5 em vez de outro número decimal complexo, a resposta famosa atribuída à tradição de Tukey era simples e pragmática: \textit{"1,0 era pouco demais e 2,0 era demais."}
+
+\section{A Conexão com a Distribuição Normal}
+\subsection{Sob a hipótese de normalidade}
+Sob a hipótese de normalidade $X \sim \mathcal{N}(\mu, \sigma^2)$, onde:
+\begin{itemize}
+    \item $\mu$ é a média populacional:
+    \begin{itemize}
+        \item Medida de tendência central que indica o ponto de equilíbrio e centro de simetria da curva normal.
+        \item Graficamente: localiza o pico da curva em forma de sino. Na distribuição normal, a média ($\mu$) coincide exatamente com a mediana e a moda.
+    \end{itemize}
+    \item $\sigma^2$ é a variância populacional:
+    \begin{itemize}
+        \item Média dos \textbf{desvios quadráticos} em relação à média populacional ($\mu$).
+        \item Mede a variabilidade total do processo. Como sua unidade fica elevada ao quadrado, ela é usada principalmente para cálculos algébricos, enquanto o desvio padrão ($\sigma$) é usado para interpretar o gráfico.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../imagens/distribuicao_normal_figura_1.png}
+    \caption{Distribuição Normal - Conceito Visual}
+\end{figure}
+
+\subsection{A Função de Distribuição Acumulada (FDA) da Normal Padrão}
+A \textbf{Função de Distribuição Acumulada (FDA)} da \textbf{Normal Padrão} $Z \sim \mathcal{N}(0, 1)$ é denotada universalmente pela letra grega $\Phi(z)$. Ela calcula a probabilidade acumulada de uma variável aleatória normal assumir um valor menor ou igual a um determinado escore $z$, ou seja, $P(Z \le z)$.
+
+A densidade de probabilidade da distribuição normal padrão é:
+\begin{equation}
+\varphi(t) = \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}}
+\end{equation}
+
+A FDA é obtida integrando essa densidade desde o extremo esquerdo até o ponto $z$:
+\begin{equation}
+\Phi(z) = P(Z \le z) = \int_{-\infty}^{z} \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../imagens/funcao_de_distribuicao_acumulada_figura 2.jpg}
+    \caption{Função de Distribuição Acumulada (FDA)}
+\end{figure}
+
+\subsection{Entendendo o Conceito de Áreas}
+A área total sob toda a curva de Gauss (de $t = -\infty$ a $t = +\infty$) é definida como 1,0 (o equivalente a 100\%). Como a distribuição normal é perfeitamente simétrica em relação ao centro ($z=0$):
+\begin{itemize}
+    \item A metade esquerda (de $-\infty$ até 0) contém metade da área total: $0,5$ ($50\%$).
+    \item A metade direita (de 0 até $+\infty$) contém a outra metade da área total: $0,5$ ($50\%$).
+\end{itemize}
+
+Assim, $\Phi(0) = 0,5$. 
+Para valores maiores:
+\begin{equation}
+\Phi(z) = 0,5 + \text{área entre 0 e z}
+\end{equation}
+
+Exemplos práticos:
+\begin{itemize}
+    \item Para $z = 1,15$: a área acumulada é $0,5 + 0,3749 = \mathbf{0,8749}$ ($87,49\%$).
+    \item Para $z = 3,00$: a área acumulada é $0,5 + 0,4987 = \mathbf{0,9987}$ ($99,87\%$).
+\end{itemize}
+
+O Ponto Crucial: O valor 1,0 não é atingido em $z=1$ nem em $z=3$. Ele é a assíntota limite quando $z$ tende ao infinito positivo ($z \to +\infty$).
+
+\subsection{Resolução Matemática das Integrais}
+\textbf{Parte A: Provar que a Área Total vale 1,0 (quando $z \to +\infty$)}\\
+Queremos resolver a integral imprópria de toda a curva. Para resolver a integral de Gauss $I = \int_{-\infty}^{+\infty} e^{-\frac{t^2}{2}} \, dt$, elevamos a expressão ao quadrado e passamos para coordenadas polares ($x = r\cos\theta, y = r\sin\theta, dx dy = r dr d\theta$):
+\begin{equation}
+I^2 = \left( \int_{-\infty}^{+\infty} e^{-\frac{x^2}{2}} dx \right) \left( \int_{-\infty}^{+\infty} e^{-\frac{y^2}{2}} dy \right) = \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} e^{-\frac{x^2+y^2}{2}} dx dy
+\end{equation}
+Em coordenadas polares:
+\begin{equation}
+I^2 = \int_0^{2\pi} d\theta \int_0^{+\infty} r e^{-\frac{r^2}{2}} dr = 2\pi \cdot 1 = 2\pi \implies I = \sqrt{2\pi}
+\end{equation}
+Substituindo na integral da probabilidade total:
+\begin{equation}
+I_{\text{total}} = \frac{1}{\sqrt{2\pi}} \cdot \sqrt{2\pi} = \mathbf{1,0}
+\end{equation}
+
+\textbf{Parte B: Provar que $\Phi(0) = 0,5$}\\
+Como a função $g(t) = e^{-\frac{t^2}{2}}$ é par (simétrica em relação ao eixo $t=0$), a integral da metade esquerda é exatamente metade da integral total:
+\begin{equation}
+\Phi(0) = \frac{1}{\sqrt{2\pi}} \frac{\sqrt{2\pi}}{2} = \mathbf{0,5}
+\end{equation}
+
+\section{A Função Quantil Inversa ($\Phi^{-1}$) e as Separatrizes}
+A função inversa $\Phi^{-1}(p)$ (conhecida como \textbf{função quantil} ou \textit{probit}) faz o caminho oposto: dada uma probabilidade acumulada $p \in (0, 1)$, ela determina qual é o escore $z$ correspondente.
+
+Ela responde à pergunta: \textit{"Qual é o escore padronizado $z$ tal que a probabilidade acumulada à sua esquerda seja exatamente $p$?"}
+
+Esta função estabelece a ponte analítica entre a curva normal e os quartis:
+\begin{itemize}
+    \item \textbf{1º Quartil ($Q_1$ ou $P_{25}$):} Acumula 25\% da área, $z_1 = \Phi^{-1}(0,25) \approx \mathbf{-0,6745}$.
+    \item \textbf{Mediana / 2º Quartil ($Q_2$ ou $P_{50}$):} Acumula 50\% da área, $z_2 = \Phi^{-1}(0,50) = \mathbf{0}$.
+    \item \textbf{3º Quartil ($Q_3$ ou $P_{75}$):} Acumula 75\% da área, $z_3 = \Phi^{-1}(0,75) \approx \mathbf{+0,6745}$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../imagens/funcao_quantil_inversa_figura 4.png}
+    \caption{Função Quantil Inversa ($\Phi^{-1}$)}
+\end{figure}
+
+A função inversa não possui uma expressão algébrica elementar fechada. Softwares utilizam aproximações racionais de altíssima precisão. Uma aproximação clássica de Winitzki usa a Função de Erro Inversa ($\text{erf}^{-1}$).
+
+\subsection{Cálculo Passo a Passo para $z_3$ e $z_1$}
+Consultando a Tabela da Normal Padrão, buscamos a probabilidade de $0,7500$.
+\begin{itemize}
+    \item Linha $0,6$, Coluna $0,07$: $0,7486$
+    \item Linha $0,6$, Coluna $0,08$: $0,7517$
+\end{itemize}
+Aplicando interpolação linear:
+\begin{equation}
+z_3 = 0,67 + \left(\frac{0,7500 - 0,7486}{0,7517 - 0,7486}\right) \cdot (0,01) \approx \mathbf{0,6745}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../imagens/tabela_phi_z_quartis_leitura_inversa_figura 5.png}
+    \caption{Tabela da Normal Padrão}
+\end{figure}
+
+\section{Aplicação no Boxplot e na Regra de Tukey}
+A FDA da Normal Padrão permite demonstrar a fundamentação matemática:
+\begin{enumerate}
+    \item \textbf{Amplitude Interquartílica (IQR):} $IQR = Q_3 - Q_1 = 0,6745\sigma - (-0,6745\sigma) = \mathbf{1,3490\sigma}$.
+    \item \textbf{Determinação da Cerca Superior ($1,5 \cdot IQR$):}
+    \begin{equation}
+        \text{Cerca Superior} = Q_3 + 1,5 \cdot IQR = 0,6745\sigma + 1,5(1,3490\sigma) = \mathbf{2,698\sigma \approx 2,7\sigma}
+    \end{equation}
+    \item \textbf{Cálculo da Probabilidade de Cauda:} Usando a FDA, a probabilidade de ultrapassar $\pm 2,7\sigma$ por acaso é $P(|Z| > 2,7) = 2 \cdot (1 - \Phi(2,7)) \approx \mathbf{0,0070}$ (ou $\mathbf{0,70\%}$).
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../imagens/regra_tukey_boxplot_figura 6.png}
+    \caption{Aplicação na Regra de Tukey}
+\end{figure}
+
+A regra de Tukey ($1,5 \times IQR$) é, portanto, uma excelente aproximação robusta (não-paramétrica) para o clássico limite de $3\sigma$ da distribuição normal, encontrando o "Ponto ótimo de sensibilidade" que evita o excesso de alarmes falsos sem depender de médias, que são sensíveis a outliers.
+
+\end{document}

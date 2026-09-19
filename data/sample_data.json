@@ -1,0 +1,5 @@
+{
+  "nome_variavel": "Tempo diário de deslocamento (min)",
+  "amostra": [15, 20, 20, 25, 50, 56, 70, 80, 90, 90, 140, 170, 210],
+  "tamanho_n": 13
+}

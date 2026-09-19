@@ -1,0 +1,89 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, top=3cm, right=2cm, bottom=2cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Plano de Aula}
+\fancyhead[R]{Medidas Separatrizes e Boxplot}
+\fancyfoot[C]{\thepage}
+
+\title{\vspace{-2cm}\textbf{Plano de Aula: Medidas Separatrizes, Boxplot e a Origem do Fator $1,5$}}
+\author{Marco Antonio Lima de Castro}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Dados de Identificação}
+\begin{itemize}
+    \item \textbf{Tema da Aula:} Medidas Separatrizes (Quartis, Decis, Percentis) e Diagrama de Caixa (Boxplot).
+    \item \textbf{Tempo Estimado:} 40 minutos (aula e arguição).
+    \item \textbf{Público-Alvo:} Alunos do PROFMAT.
+\end{itemize}
+
+\section{Objetivos de Aprendizagem}
+\begin{itemize}
+    \item \textbf{Objetivo Geral:} Compreender o conceito, o cálculo e a aplicação visual das Medidas Separatrizes na análise exploratória de dados.
+    \item \textbf{Objetivos Específicos:}
+    \begin{itemize}
+        \item Definir Quartis, Decis e Percentis para dados brutos e agrupados em classes.
+        \item Construir e interpretar o Diagrama de Caixa (Boxplot) com base no resumo dos 5 números.
+        \item Explicar matematicamente a regra do fator $1,5$ de John Tukey para detecção de anomalias (outliers) utilizando a distribuição Normal Padrão como base teórica de comparação.
+    \end{itemize}
+\end{itemize}
+
+\section{Metodologia e Abordagem Didática}
+A aula adota uma \textbf{abordagem multimodal e investigativa}, dividindo-se entre a exposição teórica clássica e a simulação computacional ao vivo.
+O material teórico-denso (integrais e interpolações por semelhança de triângulos) foi estrategicamente compilado em um ``Roteiro Técnico'' (\texttt{roteiro\_tecnico\_separatrizes.pdf}) auxiliar em PDF entregue aos alunos. Em sala de aula, o foco recairá sobre a \textbf{intuição visual e prática}, minimizando o tempo gasto em cálculos manuais através do uso de um Painel Interativo (desenvolvido em \textit{Streamlit}/Python) que processará um conjunto de dados reais (tempos de deslocamento).
+
+\section{Recursos Didáticos}
+\begin{itemize}
+    \item Slides expositivos (contendo exemplos didáticos).
+    \item Painel Interativo Python / Streamlit (execução local).
+    \item Roteiro Técnico em PDF (para aprofundamento das demonstrações da Regra de Tukey e fórmulas).
+\end{itemize}
+
+\section{Cronograma de Execução (40 min)}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}p{3.5cm}p{9.5cm}c@{}}
+\toprule
+\textbf{Bloco / Fases} & \textbf{Descrição das Atividades} & \textbf{Duração} \\ \midrule
+\textbf{1. Fundamentos (Apresentação I)} & Contextualização inicial e mapa mental das separatrizes (Quartis, Decis e Percentis). Diferenciação conceitual das formas de cálculo (Rol, Tabela Simples e Classes). & 10 min \\ 
+\addlinespace
+\textbf{2. Dinâmica Prática (Streamlit)} & Uso do Painel Interativo para demonstrar cálculos com dados reais de tempo de deslocamento. Visualização interativa da interpolação e do Tríptico de Assimetrias do Boxplot. & 12 min \\ 
+\addlinespace
+\textbf{3. A Origem do Fator 1,5 (Apresentação II)} & Transição para os slides específicos do Fator de Tukey. Breve contexto histórico (EDA e Bell Labs), prova da área sob a normal e validação visual de $c=1,5$ ($\pm 2,7\sigma$) via painel. & 12 min \\ 
+\addlinespace
+\textbf{4. Encerramento e Arguição} & Reflexão final sobre a importância de detectar anomalias (Outliers) no mundo real, com breve menção conceitual ao "Cisne Negro" (Taleb) e a limitação das estatísticas clássicas. Abertura para arguição da banca. & 6 min \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Declaração de Transparência no Uso de IA Generativa}
+\noindent \textbf{DECLARAÇÃO DE USO DE FERRAMENTAS DE INTELIGÊNCIA ARTIFICIAL GENERATIVA} \\
+\textit{(Em conformidade com as diretrizes de integridade da CAPES e alinhada ao Art. 9º da Portaria CNPq nº 2.664/2026)}
+
+Declaro que utilizei ferramentas de Inteligência Artificial Generativa do ecossistema Google Gemini (Gemini 2.5 Pro, Gemini 3.1 Pro via interface de linha de comando Antigravity CLI e Gemini Notebook) exclusivamente como apoio instrumental para concepção didática, estruturação lógica do tempo de apresentação, geração de templates computacionais em Python/Plotly e formatação \LaTeX{} das expressões analíticas.
+
+Todos os cálculos, conceitos matemáticos, análises descritivas e interpretações foram revisados, verificados e validados pelo autor humano, que assume responsabilidade científica e autoral integral pelo trabalho.
+
+\section{Referências Bibliográficas}
+\begin{itemize}
+    \item BARBETTA, Pedro Alberto. \textbf{Estatística aplicada às ciências sociais}. 8. ed. Florianópolis: Editora da UFSC, 2012.
+    \item BUSSAB, Wilton de Oliveira; MORETTIN, Pedro Alberto. \textbf{Estatística básica}. 9. ed. São Paulo: Saraiva, 2017.
+    \item HOAGLIN, David C.; IGLEWICZ, Boris; TUKEY, John W. Performance of alternative principles of the rule for identification of outliers. \textbf{Journal of the American Statistical Association}, v. 81, n. 396, p. 991-999, 1986.
+    \item MORGADO, Augusto César de Oliveira \textit{et al}. \textbf{Análise combinatória e probabilidade}. 10. ed. Rio de Janeiro: SBM, 2016. (Coleção do Professor de Matemática).
+    \item PROVENZA, Marcello Montillo. \textbf{Probabilidade e Estatística: notas de aula}. Rio de Janeiro: Universidade do Estado do Rio de Janeiro (UERJ) / PROFMAT, 2026. 6 fascículos em PDF. Material didático de circulação interna.
+    \item TUKEY, John Wilder. \textbf{Exploratory data analysis}. Reading, MA: Addison-Wesley, 1977.
+\end{itemize}
+
+\end{document}

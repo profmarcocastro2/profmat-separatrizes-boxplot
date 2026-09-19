@@ -1,0 +1,256 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, top=3cm, right=2cm, bottom=2cm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{float}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Medidas Separatrizes e Boxplot}
+\fancyhead[R]{Roteiro Técnico - PROFMAT}
+\fancyfoot[C]{\thepage}
+
+\title{\vspace{-2cm}\textbf{Medidas Separatrizes, Boxplot e a Origem do Fator $1,5$}\\ \large Roteiro Técnico e Demonstrações Analíticas}
+\author{Marco Antonio Lima de Castro}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{A Provocação: A Mediana e o Mapa das Separatrizes}
+O estudo das separatrizes nasce de uma provocação natural sobre a \textbf{Mediana}. Se a Mediana divide o nosso rol de dados perfeitamente ao meio (50\% abaixo e 50\% acima), o que aconteceria se continuássemos dividindo esses subconjuntos em partes iguais? 
+
+Ao fatiar a distribuição de frequências, criamos pontos de corte que mapeiam a dispersão e a concentração dos dados, permitindo uma análise exploratória robusta. O mapa a seguir ilustra a visão geral dessas quebras:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../4. O_Mapa_das_Separatrizes_Estatisticas.png}
+    \caption{Mapa visual dividindo a amostra em Quartis, Decis e Percentis.}
+\end{figure}
+
+
+\section{Quartis e a Base do Diagrama de Caixa}
+A divisão mais clássica após a mediana é o particionamento em \textbf{Quartis} ($Q_1, Q_2, Q_3$), que fracionam o conjunto em 4 partes de 25\%. O intervalo entre o primeiro quartil ($Q_1$) e o terceiro quartil ($Q_3$) engloba os 50\% centrais da amostra, sendo a métrica fundamental (Amplitude Interquartílica - IQR) para a construção do Boxplot.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../1. Infografico_Quartis_e_Boxplot.png}
+    \caption{Guia de Quartis e a Anatomia Clássica do Boxplot.}
+\end{figure}
+
+\section{Decis}
+Quando a necessidade de granularidade aumenta, podemos fatiar os dados em 10 partes iguais de 10\%, obtendo os \textbf{Decis} ($D_1$ a $D_9$). O quinto decil ($D_5$) equivale perfeitamente à Mediana e ao Segundo Quartil ($Q_2$).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../2. Infografico_Decis.png}
+    \caption{A lógica de divisão e distribuição dos Decis.}
+\end{figure}
+
+\section{Percentis}
+A divisão em 100 partes gera os \textbf{Percentis} ($P_1$ a $P_{99}$). Como representam a máxima granularidade descritiva em partições percentuais, eles são amplamente utilizados em tabelas de crescimento, notas de exames padronizados e métricas de desempenho. O quinquagésimo percentil ($P_{50}$) equivale à Mediana, ao $Q_2$ e ao $D_5$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../3. Infografico__Percentis.png}
+    \caption{A lógica do Percentil explicada visualmente.}
+\end{figure}
+
+\section{O Cálculo de Separatrizes: Rol Ordenado vs. Tabela Simples vs. Interpolação}
+O cálculo de qualquer separatriz apresenta nuances fundamentais dependendo da forma como os dados estão organizados.
+
+\subsection{Dados não agrupados (Rol Ordenado) e o Efeito de Tamanho da Amostra}
+Quando temos a amostra bruta, a determinação de um quartil ou percentil é um processo de contagem posicional. A posição de uma separatriz $S$ em uma amostra de tamanho $n$ possui duas abordagens matemáticas que se tornam equivalentes em grandes amostras:
+
+\begin{equation}
+\text{Método Clássico: } Pos = \frac{k \cdot (n + 1)}{D} \quad \text{versus} \quad \text{Método Simplificado: } Pos = \frac{k \cdot n}{D}
+\end{equation}
+
+Onde $D \in \{4, 10, 100\}$ representa o divisor para Quartis, Decis e Percentis. É imperativo compreender a discrepância gerada pelo fator $(n+1)$, observável nos cenários abaixo:
+
+\vspace{0.3cm}
+\noindent \textbf{Cenário A: Amostra Pequena ($n = 5$)} \\
+Considere o rol ordenado: $[10, \ 20, \ 30, \ 40, \ 50]$. Analisando os Quartis ($D=4$):
+\begin{itemize}
+    \item \textbf{Método Clássico ($n+1$):} A mediana ($Q_2$, $k=2$) retorna $Pos = 2 \cdot \frac{5+1}{4} = 3,0$. O valor exato é o 3º termo: $\mathbf{30,0}$.
+    \item \textbf{Método Simplificado ($n$):} A mediana ($Q_2$) retorna $Pos = 2 \cdot \frac{5}{4} = 2,5$. A média entre o 2º e o 3º termo é $\mathbf{25,0}$.
+\end{itemize}
+Em $n=5$, o método simplificado desvia o centro da amostra em $16,7\%$. O termo $+1$ é indispensável para garantir que o corte posicional coincida perfeitamente com a mediana real do rol.
+
+\vspace{0.3cm}
+\noindent \textbf{Cenário B: Amostra Grande ($n = 100$)} \\
+Considere um rol com elementos contínuos de 1 a 100 ($[1, 2, \dots, 100]$):
+\begin{itemize}
+    \item \textbf{Método Clássico:} $Q_1$ ($k=1$) retorna $Pos = \frac{101}{4} = \mathbf{25,25}$. 
+    \item \textbf{Método Simplificado:} $Q_1$ retorna $Pos = \frac{100}{4} = \mathbf{25,00}$.
+\end{itemize}
+Em $n=100$, a divergência é de meras $0,25$ unidades (uma variação quase nula sobre a escala total). 
+
+\vspace{0.3cm}
+\noindent \textbf{Conclusão Prática:} Em amostras pequenas, o termo $+1$ (método inclusivo) é matematicamente vital para evitar distorções no fatiamento posicional. Em \textit{Big Data} ou amostras estatisticamente significantes, o $+1$ se dilui, permitindo o uso da fórmula simplificada por ser computacionalmente menos dispendiosa.
+
+\subsection{Dados Agrupados em Tabelas Simples (Variáveis Discretas)}
+Quando a variável é discreta e os dados assumem poucos valores que se repetem com alta frequência (ex: número de filhos), organizá-los em um rol contínuo extenso torna-se contraproducente. Nesses casos, utilizamos uma \textbf{tabela simples com frequências exatas para valores únicos}.
+
+O caminho de cálculo neste cenário é uma transição elegante entre a contagem manual e a estatística de agrupamento. A lógica consiste em:
+\begin{enumerate}
+    \item Calcular a posição teórica (geralmente $Pos = \frac{k \cdot (n+1)}{D}$ ou $Pos = \frac{k \cdot n}{D}$).
+    \item Utilizar a coluna de \textbf{Frequência Acumulada ($F_{ac}$)} para realizar uma \textbf{varredura vertical}.
+\end{enumerate}
+A separatriz será o primeiro valor da variável (coluna $x_i$) cuja frequência acumulada iguale ou supere a posição calculada. Neste cenário, não há necessidade de interpolação analítica (salvo quando a posição cai no intervalo exato de salto entre duas frequências acumuladas), pois a variável é discreta.
+
+\subsection{Dados Agrupados em Classes e a Fórmula da Interpolação}
+Quando os dados estão agrupados em tabelas de frequência contínua, perdemos a identidade individual de cada elemento. As separatrizes devem ser estimadas assumindo que os dados se distribuem de maneira uniforme dentro de cada classe. 
+
+A fórmula clássica deriva diretamente da semelhança de triângulos na ogiva (polígono de frequências acumuladas), montando a seguinte interpolação linear:
+\begin{equation}
+S = l_i + \left( \frac{\frac{k \cdot n}{D} - F_{ant}}{f_i} \right) \cdot h
+\end{equation}
+Onde:
+\begin{itemize}
+    \item $l_i$: limite inferior da classe que contém a separatriz.
+    \item $\frac{k \cdot n}{D}$: posição teórica buscada ($D=4$ para quartis, $D=10$ para decis, $D=100$ para percentis).
+    \item $F_{ant}$: frequência acumulada da classe anterior.
+    \item $f_i$: frequência simples da classe da separatriz.
+    \item $h$: amplitude do intervalo de classe.
+\end{itemize}
+
+\subsection{A Discrepância de Abordagens (MVP)}
+É crucial destacar que o cálculo via Rol Ordenado ou Tabela Simples retornará valores exatos baseados em pontos reais da amostra, enquanto a Interpolação Linear em Classes retornará estimativas contínuas. Essa diferença metodológica gera uma \textbf{leve discrepância matemática} nos resultados práticos, fenômeno claramente ilustrado no painel interativo (MVP) em sala de aula. Quanto maior a amplitude das classes ($h$) e menor a uniformidade real dos dados, maior será a discrepância da interpolação em relação aos dados não agrupados.
+
+\section{A Dedução Analítica do Fator de Tukey (1,5)}
+Uma das maiores curiosidades no estudo da Estatística Descritiva é a escolha do multiplicador $1,5$ na fórmula das cercas do Boxplot de John Tukey. Esta seção demonstra de forma sucinta como esse valor se conecta com a distribuição Normal Padrão $Z \sim \mathcal{N}(0, 1)$, aproximando-se da regra clássica dos $3\sigma$.
+
+\vspace{0.3cm}
+\noindent \textbf{Nota de Aprofundamento:} Para uma explanação detalhada contemplando o contexto histórico (limitações de cálculo mental nos Laboratórios Bell) e as demonstrações matemáticas completas (incluindo resolução de integrais polares de Gauss e aproximações da Função Quantil Inversa), \textbf{consulte o documento complementar}: \textit{``A Lógica e a História do Fator 1,5 de Tukey''} (ver arquivo \texttt{fator\_tukey.pdf}).
+\vspace{0.3cm}
+
+\subsection{Nota Metodológica: Parâmetros Populacionais vs. Estatísticas Amostrais}
+Em estatística descritiva, a diferença básica entre o alfabeto comum (latino) e o alfabeto grego serve para diferenciar as propriedades de uma amostra das propriedades de uma população inteira. A regra geral funciona assim:
+
+\subsubsection*{$\bullet$ Alfabeto Grego: Parâmetros Populacionais}
+As letras gregas são usadas para representar \textbf{parâmetros}, que são os valores reais e fixos de uma população inteira (o grupo completo que você quer estudar).
+\begin{itemize}
+    \item $\mu$ (Mí): Média da população.
+    \item $\sigma$ (Sigma minúsculo): Desvio padrão da população.
+    \item $\sigma^2$: Variância da população.
+    \item $N$: Tamanho total da população.
+\end{itemize}
+
+\subsubsection*{$\bullet$ Alfabeto Latino (Comum): Estatísticas Amostrais}
+As letras do nosso alfabeto comum são usadas para representar \textbf{estatísticas} (ou estimadores), que são os valores calculados a partir de uma \textbf{amostra} (um subgrupo extraído da população).
+\begin{itemize}
+    \item $\bar{x}$ (X-barra): Média da amostra.
+    \item $s$ (ou $sd$): Desvio padrão da amostra.
+    \item $s^2$: Variância da amostra.
+    \item $n$: Tamanho da amostra.
+\end{itemize}
+
+\subsubsection*{Resumo Visual}
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Conceito} & \textbf{População (Grupo Todo)} & \textbf{Amostra (Parte do Grupo)} \\ \midrule
+\textbf{Tipo de Dado} & Parâmetro (Fixo/Real) & Estatística (Estimativa) \\
+\textbf{Alfabeto} & Grego & Latino (Comum) \\ \addlinespace
+Média & $\mu$ & $\bar{x}$ \\
+Desvio Padrão & $\sigma$ & $s$ \\
+Variância & $\sigma^2$ & $s^2$ \\
+Tamanho & $N$ & $n$ \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Essa distinção é fundamental porque, na maioria das vezes, não conseguimos coletar dados de toda a população. Usamos então as letras latinas ($\bar{x}, s$) para tentar adivinhar ou aproximar os valores reais das letras gregas ($\mu, \sigma$).
+
+\vspace{0.3cm}
+\noindent \textbf{Nota de Encadeamento:} A inserção desta nota metodológica neste ponto do texto tem a intenção de posicionar corretamente o entendimento do leitor para a demonstração analítica subsequente, dado que as letras gregas $\mu$ (Mí) e $\sigma$ (Sigma minúsculo) serão fundamentais na dedução teórica do modelo de Tukey utilizando a Curva Normal.
+
+\subsection{A Função Quantil e a Posição dos Quartis na Curva Normal}
+Considere a variável aleatória $Z$ com distribuição Normal Padrão, $Z \sim \mathcal{N}(0, 1)$. A sua Função de Distribuição Acumulada (FDA) é denotada pela letra grega maiúscula $\Phi(z)$, dada pela integral da densidade $\varphi(t)$:
+\begin{equation}
+\Phi(z) = P(Z \le z) = \int_{-\infty}^{z} \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt
+\end{equation}
+
+Geometricamente, $\Phi(z)$ fornece a área sob a curva do sino desde $-\infty$ até o ponto $z$.
+
+Para determinarmos os quartis teóricos na Normal, precisamos da \textbf{Função Quantil} (inversa da Função de Distribuição Acumulada $\Phi(z)$). Como o terceiro quartil ($Q_3$) acumula exatamente $75\%$ ($p = 0,75$) da área da distribuição, buscamos $z$ tal que:
+\begin{equation}
+\Phi(z) = 0,75 \iff z = \Phi^{-1}(0,75)
+\end{equation}
+
+Consultando um recorte da Tabela da Normal Padrão:
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}c|cccccccccc@{}}
+\toprule
+$z$ & 0,00 & ... & 0,05 & 0,06 & \textbf{0,07} & \textbf{0,08} & 0,09 \\ \midrule
+... & ... & ... & ... & ... & ... & ... & ... \\
+\textbf{0,6} & 0,7257 & ... & 0,7422 & 0,7454 & \textbf{0,7486} & \textbf{0,7517} & 0,7549 \\
+\bottomrule
+\end{tabular}
+\caption{Trecho da Tabela Normal Padrão. A área de $0,7500$ está entre $z=0,67$ e $z=0,68$.}
+\end{table}
+
+Por interpolação linear exata, obtemos $z \approx 0,6745$. Padronizando para $X \sim \mathcal{N}(\mu, \sigma^2)$, temos:
+\begin{itemize}
+    \item $Q_3 = \mu + 0,6745\sigma$
+    \item $Q_1 = \mu - 0,6745\sigma$
+\end{itemize}
+
+\subsection{As Cercas de Tolerância e a Aproximação para $2,7\sigma$}
+O comprimento da caixa do boxplot, o Intervalo Interquartílico (IQR), para uma variável normalmente distribuída é:
+\begin{equation}
+\text{IQR} = Q_3 - Q_1 = (\mu + 0,6745\sigma) - (\mu - 0,6745\sigma) = 1,3490\sigma
+\end{equation}
+
+Aplicando a regra de Tukey ($1,5 \times \text{IQR}$) para a Cerca Superior:
+\begin{align}
+\text{Cerca Superior} &= Q_3 + 1,5 \times \text{IQR} \nonumber \\
+&= (\mu + 0,6745\sigma) + 1,5 \times (1,3490\sigma) \nonumber \\
+&= \mu + 2,698\sigma \approx \mu + 2,7\sigma
+\end{align}
+
+\subsection{Comparação: Tukey versus Gauss}
+A tabela abaixo compara a probabilidade de um ponto ser classificado como \textit{outlier} em uma distribuição Normal perfeita:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Critério} & \textbf{Limite nos Dados} & \textbf{$P(\text{Dentro})$} & \textbf{Prob. Outlier} \\ \midrule
+Regra de Gauss ($3\sigma$) & $\mu \pm 3,000\sigma$ & $99,73\%$ & $0,27\%$ (1 em 370) \\
+Boxplot de Tukey ($1,5$) & $\mu \pm 2,698\sigma$ & $99,30\%$ & $0,70\%$ (1 em 143) \\ \bottomrule
+\end{tabular}
+\caption{Comparativo das áreas de cauda (Falsos Positivos).}
+\end{table}
+
+\textbf{A genialidade do cálculo mental:} Para que o corte de Tukey fosse exatamente em $3\sigma$, o multiplicador deveria ser cerca de $1,72$. No entanto, Tukey concebeu a ferramenta na era pré-computacional (1970). Multiplicar por $1,5$ é trivial ($IQR + IQR/2$), unindo rigor analítico e simplicidade metodológica com perfeição.
+
+\section{Declaração de Transparência no Uso de IA Generativa}
+\noindent \textbf{DECLARAÇÃO DE USO DE FERRAMENTAS DE INTELIGÊNCIA ARTIFICIAL GENERATIVA} \\
+\textit{(Em conformidade com as diretrizes de integridade da CAPES e alinhada ao Art. 9º da Portaria CNPq nº 2.664/2026)}
+
+Declaro que utilizei ferramentas de Inteligência Artificial Generativa do ecossistema Google Gemini (Gemini 2.5 Pro, Gemini 3.1 Pro via interface de linha de comando Antigravity CLI e Gemini Notebook) exclusivamente como apoio instrumental para concepção didática, estruturação lógica do tempo de apresentação, geração de templates computacionais em Python/Plotly e formatação \LaTeX{} das expressões analíticas.
+
+Todos os cálculos, conceitos matemáticos, análises descritivas e interpretações foram revisados, verificados e validados pelo autor humano, que assume responsabilidade científica e autoral integral pelo trabalho.
+
+\section{Referências Bibliográficas}
+\begin{itemize}
+    \item BARBETTA, Pedro Alberto. \textbf{Estatística aplicada às ciências sociais}. 8. ed. Florianópolis: Editora da UFSC, 2012.
+    \item BUSSAB, Wilton de Oliveira; MORETTIN, Pedro Alberto. \textbf{Estatística básica}. 9. ed. São Paulo: Saraiva, 2017.
+    \item HOAGLIN, David C.; IGLEWICZ, Boris; TUKEY, John W. Performance of alternative principles of the rule for identification of outliers. \textbf{Journal of the American Statistical Association}, v. 81, n. 396, p. 991-999, 1986.
+    \item MORGADO, Augusto César de Oliveira \textit{et al}. \textbf{Análise combinatória e probabilidade}. 10. ed. Rio de Janeiro: SBM, 2016. (Coleção do Professor de Matemática).
+    \item PROVENZA, Marcello Montillo. \textbf{Probabilidade e Estatística: notas de aula}. Rio de Janeiro: Universidade do Estado do Rio de Janeiro (UERJ) / PROFMAT, 2026. 6 fascículos em PDF. Material didático de circulação interna.
+    \item TUKEY, John Wilder. \textbf{Exploratory data analysis}. Reading, MA: Addison-Wesley, 1977.
+\end{itemize}
+
+\end{document}
