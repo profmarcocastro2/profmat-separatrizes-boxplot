@@ -48,6 +48,7 @@ st.markdown("""
         border-radius: 12px; 
         margin-top: 20px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        color: #0F172A;
     }
     
     .pedagogic-box { 
@@ -58,6 +59,7 @@ st.markdown("""
         border-radius: 12px; 
         margin-top: 20px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        color: #0F172A;
     }
     
     /* Customização nativa das abas do Streamlit */
@@ -210,7 +212,7 @@ with tab1:
         yaxis=dict(fixedrange=True, domain=[0, 0.3], showticklabels=False),
         yaxis2=dict(fixedrange=True, domain=[0.35, 1], showticklabels=False)
     )
-    st.plotly_chart(fig_box, use_container_width=True)
+    st.plotly_chart(fig_box, use_container_width=True, config={'displayModeBar': False})
 
     # Box de Interpretação
     texto_outlier = f"Foi identificado um valor de {outliers} minutos, ultrapassando a cerca de Tukey ({cerca_sup:g} min). Este colega mora excepcionalmente longe em comparação ao padrão da turma." if outliers else "Não foram identificados valores atípicos nesta amostra."
@@ -314,8 +316,8 @@ with tab2:
     # Pontos reais no eixo X
     fig_s.add_trace(go.Scatter(x=list(set(dados_simples)), y=[0]*len(set(dados_simples)), mode="markers", marker=dict(color="#047857", size=8), name="Valores Discretos"))
     
-    fig_s.update_layout(height=250, margin=dict(l=20, r=20, t=30, b=20), template="plotly_white", showlegend=False, yaxis=dict(showticklabels=False), title=f"<b>Efeito Varredor: Acumulando {k_simples*25}% da Amostra (Discreta)</b>")
-    st.plotly_chart(fig_s, use_container_width=True)
+    fig_s.update_layout(height=250, margin=dict(l=20, r=20, t=30, b=20), template="plotly_white", showlegend=False, xaxis=dict(fixedrange=True), yaxis=dict(showticklabels=False, fixedrange=True), title=f"<b>Efeito Varredor: Acumulando {k_simples*25}% da Amostra (Discreta)</b>")
+    st.plotly_chart(fig_s, use_container_width=True, config={'displayModeBar': False})
 
 
 # ==========================================
@@ -428,8 +430,8 @@ with tab3:
     
     fig_c.add_vline(x=q_agrup, line_dash="dash", line_color="#1E3A8A", annotation_text=f"Q{k_sel} Interpolado = {q_agrup:.1f}", annotation_position="top left")
     
-    fig_c.update_layout(height=250, margin=dict(l=20, r=20, t=30, b=20), template="plotly_white", showlegend=False, yaxis=dict(showticklabels=False), title=f"<b>Efeito Varredor Contínuo: Acumulando {k_sel*25}% da Amostra Interpolada</b>")
-    st.plotly_chart(fig_c, use_container_width=True)
+    fig_c.update_layout(height=250, margin=dict(l=20, r=20, t=30, b=20), template="plotly_white", showlegend=False, xaxis=dict(fixedrange=True), yaxis=dict(showticklabels=False, fixedrange=True), title=f"<b>Efeito Varredor Contínuo: Acumulando {k_sel*25}% da Amostra Interpolada</b>")
+    st.plotly_chart(fig_c, use_container_width=True, config={'displayModeBar': False})
 
 # ==========================================
 # ABA 4: TRÍPTICO DE ASSIMETRIAS
@@ -469,7 +471,7 @@ with tab4:
         fig_sim.add_trace(go.Scatter(x=x_sim, y=y_sim, fill='tozeroy', fillcolor='rgba(59, 130, 246, 0.2)', line_color='#2563EB', name="Densidade"))
         fig_sim.add_trace(go.Box(x=dados_sim, name="Boxplot", orientation="h", yaxis="y2", marker_color="#1E3A8A", boxpoints="all", jitter=0.3, pointpos=-1.8))
         fig_sim.update_layout(height=350, template="plotly_white", showlegend=False, yaxis=dict(domain=[0.35, 1], showticklabels=False), yaxis2=dict(domain=[0, 0.25], showticklabels=False), margin=dict(l=10, r=10, t=10, b=10), dragmode=False, xaxis=dict(fixedrange=True), yaxis_fixedrange=True, yaxis2_fixedrange=True)
-        st.plotly_chart(fig_sim, use_container_width=True)
+        st.plotly_chart(fig_sim, use_container_width=True, config={'displayModeBar': False})
         
         st.info("**Relação:** Média ≈ Mediana ≈ Moda. A massa de dados está perfeitamente equilibrada ao redor do centro.")
         
@@ -489,7 +491,7 @@ with tab4:
         fig_pos.add_trace(go.Scatter(x=x_pos, y=y_pos, fill='tozeroy', fillcolor='rgba(16, 185, 129, 0.2)', line_color='#059669', name="Densidade"))
         fig_pos.add_trace(go.Box(x=dados_pos, name="Boxplot", orientation="h", yaxis="y2", marker_color="#047857", boxpoints="all", jitter=0.3, pointpos=-1.8))
         fig_pos.update_layout(height=350, template="plotly_white", showlegend=False, yaxis=dict(domain=[0.35, 1], showticklabels=False), yaxis2=dict(domain=[0, 0.25], showticklabels=False), margin=dict(l=10, r=10, t=10, b=10), dragmode=False, xaxis=dict(fixedrange=True), yaxis_fixedrange=True, yaxis2_fixedrange=True)
-        st.plotly_chart(fig_pos, use_container_width=True)
+        st.plotly_chart(fig_pos, use_container_width=True, config={'displayModeBar': False})
 
         st.info("**Relação:** Média > Mediana > Moda. Valores altos extremos puxam a Média para cima, esticando a caixa e a haste direita.")
         
@@ -509,7 +511,7 @@ with tab4:
         fig_neg.add_trace(go.Scatter(x=x_neg, y=y_neg, fill='tozeroy', fillcolor='rgba(239, 68, 68, 0.2)', line_color='#DC2626', name="Densidade"))
         fig_neg.add_trace(go.Box(x=dados_neg, name="Boxplot", orientation="h", yaxis="y2", marker_color="#B91C1C", boxpoints="all", jitter=0.3, pointpos=-1.8))
         fig_neg.update_layout(height=350, template="plotly_white", showlegend=False, yaxis=dict(domain=[0.35, 1], showticklabels=False), yaxis2=dict(domain=[0, 0.25], showticklabels=False), margin=dict(l=10, r=10, t=10, b=10), dragmode=False, xaxis=dict(fixedrange=True), yaxis_fixedrange=True, yaxis2_fixedrange=True)
-        st.plotly_chart(fig_neg, use_container_width=True)
+        st.plotly_chart(fig_neg, use_container_width=True, config={'displayModeBar': False})
 
         st.info("**Relação:** Média < Mediana < Moda. Valores baixos extremos puxam a Média para baixo, alongando a haste inferior.")
         
@@ -583,7 +585,7 @@ with tab5:
             dragmode=False, xaxis=dict(fixedrange=True), yaxis=dict(fixedrange=True),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-        st.plotly_chart(fig_normal, use_container_width=True)
+        st.plotly_chart(fig_normal, use_container_width=True, config={'displayModeBar': False})
 
     with col_text:
         st.info("💡 **Exemplo Prático (Teste de QI):** João ($z=2.0$, QI 130), Maria ($z=3.2$, QI 148) e Einstein ($z=4.0$, QI 160). Observe como o critério escolhido define quem é classificado como Outlier (🔴) ou Regular (🟢).")
