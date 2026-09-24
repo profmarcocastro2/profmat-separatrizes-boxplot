@@ -1,0 +1,8 @@
+{
+  "name": "Separatrizes, Boxplot e Fator 1.5 (PROFMAT)",
+  "description": "Painel Interativo PROFMAT sobre Medidas Separatrizes, construção do Boxplot e dedução analítica do Fator 1.5 de John Tukey.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

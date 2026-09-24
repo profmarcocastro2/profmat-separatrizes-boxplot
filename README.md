@@ -4,29 +4,23 @@ Este repositório contém o código-fonte, a documentação teórica e o roteiro
 O tema foca nas Medidas Separatrizes, construção do Boxplot e a prova analítica do Fator 1.5 de John Tukey.
 
 ## Estrutura do Projeto
-- `app.py`: Aplicação web iterativa construída com Streamlit.
-- `modules/`: Módulos em Python contendo a lógica matemática, geração dos gráficos e deduções estatísticas.
+- `src/`: Aplicação web interativa construída com React, Vite, TypeScript e Tailwind CSS.
+  - `src/components/Tab1RealSample.tsx`: Aba 1 (Amostra Real & Boxplot com Curva KDE, Cercas e Outliers).
+  - `src/components/Tab2SimpleTable.tsx`: Aba 2 (Tabela Simples Discreta com Varredura de Frequência Acumulada).
+  - `src/components/Tab3GroupedData.tsx`: Aba 3 (Dados Agrupados em Classes com Interpolação Linear).
+  - `src/components/Tab4Triptych.tsx`: Aba 4 (Tríptico Comparativo de Assimetrias e Densidade).
+  - `src/components/Tab5TukeyFactor.tsx`: Aba 5 (Origem Teórica do Fator 1.5 de John Tukey na Normal).
+  - `src/components/Tab6References.tsx`: Aba 6 (Normas ABNT e Declaração CAPES).
 - `docs/`: Roteiro de aula, demonstrações formais, declaração de uso de IA e referências ABNT.
-- `data/`: Dados amostrais.
+- `data/`: Dados amostrais em JSON.
 
-## Como Executar no WSL (Windows Subsystem for Linux)
-
-1. **Abra o seu terminal do WSL (Ubuntu/Debian).**
-2. **Navegue até o diretório do projeto:**
+## Como Executar
+1. Instale as dependências:
    ```bash
-   cd "/mnt/c/Users/profm/OneDrive/Documentos/PROFMAT 2025/11. PROBABILIDADE E ESTATÍSTICA/Medidas Separatrizes/profmat-separatrizes-boxplot"
+   npm install
    ```
-3. **Crie um ambiente virtual (recomendado):**
+2. Execute o servidor de desenvolvimento:
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate
+   npm run dev
    ```
-4. **Instale as dependências:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-5. **Execute a aplicação Streamlit:**
-   ```bash
-   streamlit run app.py
-   ```
-6. Acesse a URL fornecida no terminal pelo navegador (geralmente `http://localhost:8501`).
+3. Acesse a aplicação na porta 3000.
