@@ -13,7 +13,10 @@ export const MathView: React.FC<MathViewProps> = ({ math, block = false, classNa
   useEffect(() => {
     if (containerRef.current) {
       try {
-        katex.render(math, containerRef.current, {
+        // Sanitize raw '$' that isn't already escaped with '\'
+        // Since KaTeX is already in math mode, unescaped '$' inside \text{} or math strings is invalid syntax
+        const safeMath = math.replace(/(?<!\\)\$/g, () => '\\$');
+        katex.render(safeMath, containerRef.current, {
           displayMode: block,
           throwOnError: false,
           output: 'html',

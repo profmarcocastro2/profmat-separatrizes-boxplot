@@ -382,11 +382,12 @@ export const Tab3GroupedData: React.FC = () => {
   };
 
   const handleCopyLatex = () => {
+    const latexUnit = currentPreset.unit.replace(/\$/g, '\\$');
     const text = `\\begin{table}[h!]
 \\centering
 \\begin{tabular}{lrrrrr}
 \\toprule
-Classe & Intervalo (${currentPreset.unit}) & $x_i$ & $f_i$ & $F_i$ & $F_i(\\%)$ \\\\
+Classe & Intervalo (${latexUnit}) & $x_i$ & $f_i$ & $F_i$ & $F_i(\\%)$ \\\\
 \\midrule
 ${classesData.map((r) => `${r.classeId}^a & [${r.li} \\vdash ${r.ls}) & ${r.xi} & ${r.fi} & ${r.Fi} & ${r.porc.toFixed(1)}\\%`).join(' \\\\\n')}
 \\bottomrule
@@ -1480,7 +1481,7 @@ ${classesData.map((r) => `${r.classeId}^a & [${r.li} \\vdash ${r.ls}) & ${r.xi} 
               <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
                 <span className="font-semibold text-slate-800 dark:text-slate-200">Resultado Interpolado:</span>
                 <span className="font-mono text-lg font-extrabold text-indigo-600 dark:text-indigo-400">
-                  <MathView math={`Q_${selectedK} \\approx ${valorInterpolado.toFixed(2)} \\text{ ${currentPreset.unit}}`} />
+                  <MathView math={`Q_${selectedK} \\approx ${valorInterpolado.toFixed(2)} \\text{ ${currentPreset.unit.replace(/\$/g, '\\$')}}`} />
                 </span>
               </div>
             </div>

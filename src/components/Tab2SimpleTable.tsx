@@ -14,6 +14,7 @@ import {
   HelpCircle,
   BarChart2,
   TrendingUp,
+  Info,
 } from 'lucide-react';
 
 interface StudentItem {
@@ -258,11 +259,12 @@ export const Tab2SimpleTable: React.FC = () => {
   };
 
   const handleCopyLatex = () => {
+    const latexUnit = currentPreset.unit.replace(/\$/g, '\\$');
     const text = `\\begin{table}[h!]
 \\centering
 \\begin{tabular}{rrrrr}
 \\toprule
-$x_i$ (${currentPreset.unit}) & $f_i$ & $F_i$ & $f_i(\\%)$ & $F_i(\\%)$ \\\\
+$x_i$ (${latexUnit}) & $f_i$ & $F_i$ & $f_i(\\%)$ & $F_i(\\%)$ \\\\
 \\midrule
 ${discreteTable.map((r) => `${r.x} & ${r.f} & ${r.F} & ${r.fPorc.toFixed(1)}\\% & ${r.porc.toFixed(1)}\\%`).join(' \\\\\n')}
 \\bottomrule
@@ -1296,19 +1298,49 @@ ${discreteTable.map((r) => `${r.x} & ${r.f} & ${r.F} & ${r.fPorc.toFixed(1)}\\% 
               <div>
                 <strong className="text-slate-800 dark:text-slate-200">1. Posição Teórica Amostral:</strong>
                 <div className="my-1.5 p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-center font-mono">
-                  <MathView math={`\\text{Posição} = p \\cdot n = ${(pTarget).toFixed(2)} \\times ${stats.n} = ${posTarget.toFixed(2)}`} />
+                  <MathView math={`\\text{Posição} = p \\cdot n = \\left(\\frac{k}{q}\\right) \\cdot n = \\left(\\frac{${selectedK}}{4}\\right) \\cdot ${stats.n} = ${(pTarget).toFixed(2)} \\times ${stats.n} = ${posTarget.toFixed(2)}`} />
+                </div>
+
+                {/* Observação Pedagógica: p = k / q */}
+                <div className="mt-2 p-2.5 bg-indigo-50/70 dark:bg-indigo-950/30 rounded-lg border border-indigo-100 dark:border-indigo-900/50 text-[11px] sm:text-xs leading-relaxed text-slate-700 dark:text-slate-300 space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-semibold text-indigo-700 dark:text-indigo-300">
+                    <Info className="w-3.5 h-3.5 shrink-0" />
+                    <span>Nota Teórica: Relação da Proporção <MathView math="p = \frac{k}{q}" /></span>
+                  </div>
+                  <p>
+                    A proporção <MathView math="p" /> é a razão direta entre a ordem da separatriz (<MathView math="k" />) e o número de partes iguais da divisão amostral (<MathView math="q" />):
+                  </p>
+                  <div className="py-0.5 px-2 bg-white dark:bg-slate-800 rounded border border-indigo-100 dark:border-indigo-900/40 text-center font-mono">
+                    <MathView math="p = \frac{k}{q}" />
+                  </div>
+                  <ul className="space-y-0.5 text-slate-600 dark:text-slate-400">
+                    <li>• <strong className="text-slate-700 dark:text-slate-300"><MathView math="k" />:</strong> ordem da separatriz (ex.: 1º, 2º, 3º).</li>
+                    <li>• <strong className="text-slate-700 dark:text-slate-300"><MathView math="q" />:</strong> fator fracionário (4 para quartis, 10 para decis, 100 para percentis).</li>
+                  </ul>
+                  <div className="text-slate-600 dark:text-slate-400 pt-0.5">
+                    <strong>Aplicação nos quartis e percentis:</strong>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mt-1 text-[10.5px]">
+                      <span className="p-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">1º Quartil (<MathView math="Q_1" />): <MathView math="p = \frac{1}{4} = 0.25" /></span>
+                      <span className="p-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Mediana (<MathView math="Q_2" />): <MathView math="p = \frac{2}{4} = 0.50" /> (aplicado para <MathView math={`n=${stats.n}`} />)</span>
+                      <span className="p-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">3º Quartil (<MathView math="Q_3" />): <MathView math="p = \frac{3}{4} = 0.75" /></span>
+                      <span className="p-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">72º Percentil (<MathView math="P_{72}" />): <MathView math="p = \frac{72}{100} = 0.72" /></span>
+                    </div>
+                  </div>
+                  <p className="text-[10.5px] text-indigo-950 dark:text-indigo-200 bg-indigo-100/60 dark:bg-indigo-900/40 p-1.5 rounded mt-1">
+                    💡 <em>Atalhos de Interface:</em> Os botões superiores (<MathView math="Q_1" />, <MathView math="Q_2" />, <MathView math="Q_3" />, <MathView math="Q_4" />) atuam como atalhos que resolvem <MathView math="\frac{k}{q}" /> nos bastidores e entregam o valor decimal final de <MathView math="p" /> para a fórmula da Posição Teórica Amostral.
+                  </p>
                 </div>
               </div>
               <div>
                 <strong className="text-slate-800 dark:text-slate-200">2. Condição Canônica de Varredura Discreta:</strong>
                 <div className="my-1.5 p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-center font-mono">
-                  <MathView math={`F_i \\ge ${posTarget.toFixed(2)} \\implies F = ${targetRow.F} \\quad (x_i = ${targetRow.x} \\text{ ${currentPreset.unit}})`} />
+                  <MathView math={`F_i \\ge ${posTarget.toFixed(2)} \\implies F = ${targetRow.F} \\quad (x_i = ${targetRow.x} \\text{ ${currentPreset.unit.replace(/\$/g, '\\$')}})`} />
                 </div>
               </div>
               <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
                 <span className="font-semibold text-slate-700 dark:text-slate-300">Valor Identificado na Tabela:</span>
                 <span className="font-mono text-base sm:text-lg font-extrabold text-indigo-600 dark:text-indigo-400">
-                  <MathView math={`Q_${selectedK} = ${targetRow.x} \\text{ ${currentPreset.unit}}`} />
+                  <MathView math={`Q_${selectedK} = ${targetRow.x} \\text{ ${currentPreset.unit.replace(/\$/g, '\\$')}}`} />
                 </span>
               </div>
             </div>
